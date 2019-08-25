@@ -157,4 +157,4 @@ class LazyLoad {
   }
 }
 
-export { LazyLoad };
+export default LazyLoad;

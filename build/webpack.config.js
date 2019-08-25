@@ -5,6 +5,11 @@ const dev = require('./webpack.dev');
 const prod = require('./webpack.prod');
 
 module.exports = (env, args) => {
-  const targetConfig = args.mode === 'development' ? dev : prod;
-  return merge(base, targetConfig);
+  if (args.mode === 'development') {
+    return merge(base, dev);
+  } else {
+    return prod.map(item => {
+      return merge(base, item);
+    });
+  }
 };

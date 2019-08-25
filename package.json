@@ -1,13 +1,16 @@
 {
   "name": "@autots/lazyload",
   "version": "0.0.1",
-  "description": "a lazyload lib implemented through IntersectionObserver API",
-  "main": "dist/main.js",
-  "browser": "dist/main.js",
-  "types": "src/main.d.ts",
+  "description": "A LazyLoad lib implemented through IntersectionObserver API",
+  "main": "dist/lazyload.umd.js",
+  "module": "lib/lazyload.js",
+  "browser": "dist/lazyload.umd.js",
+  "types": "lib/lazyload.d.ts",
   "scripts": {
     "dev": "webpack-dev-server --mode=development --config ./build/webpack.config.js --open",
-    "build": "webpack --mode=production --config ./build/webpack.config.js",
+    "build:umd": "webpack --mode=production --config ./build/webpack.config.js",
+    "build:es6": "tsc --target es6 --moduleResolution node -d",
+    "release": "npm run build:umd && npm run build:es6",
     "lint": "eslint src --ext .ts",
     "test": "test"
   },
@@ -38,10 +41,19 @@
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.8.0",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
     "intersection-observer": "^0.7.0",
     "tslib": "^1.10.0"
+  },
+  "homepage": "https://github.com/magnnus/lazyload-observer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/magnnus/lazyload-observer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/magnnus/lazyload-observer/issues"
   }
 }

@@ -39,4 +39,4 @@ declare class LazyLoad {
      */
     protected _processImageElement: (target: Element) => void;
 }
-export { LazyLoad };
+export default LazyLoad;

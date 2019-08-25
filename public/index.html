@@ -134,11 +134,11 @@
     </ul>
   </div>
 
-  <script src="<%= htmlWebpackPlugin.files.chunks.main.entry %>"></script>
+  <script src="<%= htmlWebpackPlugin.files.chunks.LazyLoad.entry %>"></script>
   <script>
   window.onload = function () {
 
-    var a = new ATHMFE.LazyLoad('img', {
+    var a = new AutoTs.LazyLoad('img', {
       attr: 'data-src2',
       srcsetAttr: 'data-srcset2',
       root: null,
