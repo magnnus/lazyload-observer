@@ -1,6 +1,6 @@
 /*!
- * @autots/lazyload v0.0.1
- * Last Modified @ 2019-8-25 22:27:15
+ * @autots/lazyload v0.0.2
+ * Last Modified @ 2019-8-26 00:09:08
  * Released under the MIT License.
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -215,7 +215,7 @@ var LazyLoad = /** @class */ (function () {
      */
     LazyLoad.prototype.createObserver = function () {
         var _this = this;
-        var _a = this.config, _b = _a.root, root = _b === void 0 ? null : _b, _c = _a.rootMargin, rootMargin = _c === void 0 ? '0' : _c, _d = _a.threshold, threshold = _d === void 0 ? 0 : _d, onAppear = _a.onAppear;
+        var _a = this.config, _b = _a.root, root = _b === void 0 ? null : _b, _c = _a.rootMargin, rootMargin = _c === void 0 ? '0px' : _c, _d = _a.threshold, threshold = _d === void 0 ? 0 : _d, onAppear = _a.onAppear;
         return new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
                 if (!entry.isIntersecting) {
