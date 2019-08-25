@@ -95,7 +95,7 @@ class LazyLoad {
    * 创建 IntersectionObserver 实例
    */
   createObserver (): IntersectionObserver {
-    const { root = null, rootMargin = '0', threshold = 0, onAppear } = this.config;
+    const { root = null, rootMargin = '0px', threshold = 0, onAppear } = this.config;
     return new IntersectionObserver((entries: IntersectionObserverEntry[]): void => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) {
