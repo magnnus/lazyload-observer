@@ -1,6 +1,6 @@
 import 'intersection-observer';
 
-interface IConfig {
+interface Iconfig {
   root: Element | null;
   rootMargin: string | undefined;
   threshold: number | number[];
@@ -11,17 +11,17 @@ interface IConfig {
   placeholder: string;
   onLoad: () => void;
   onError: () => void;
-  onAppear: (target: Element, length: number, config: Partial<IConfig>) => void
+  onAppear: () => void;
 }
 
 type TElements = string | NodeListOf<Element>;
 
 class LazyLoad {
-  constructor (public el: TElements, public config: Partial<IConfig>) {
+  constructor (public el: TElements, public config: Partial<Iconfig>) {
     // 生成最终配置
     this.config = {
       ...LazyLoad.defaultConfig,
-      ...config
+      ...config,
     };
 
     // 获取监听对象
@@ -37,7 +37,7 @@ class LazyLoad {
     this.init();
   }
 
-  static readonly defaultConfig: Partial<IConfig> = {
+  static readonly defaultConfig: Partial<Iconfig> = {
     delay: -1,
     attr: 'data-src',
     srcsetAttr: 'data-srcset',
@@ -46,10 +46,10 @@ class LazyLoad {
   }
 
   public targets: Element[]
+
   public observer: IntersectionObserver
 
-
-  init () {
+  init (): void {
     const { delay } = this.config;
     if (delay >= 0) {
       setTimeout(() => {
@@ -60,13 +60,13 @@ class LazyLoad {
     this.observer = this.createObserver();
     this.targets.forEach(target => {
       this.observer.observe(target);
-    })
+    });
   }
 
   /**
    * 直接加载
    */
-  protected _loadDirectly = () => {
+  protected _loadDirectly: () => void = () => {
     this.targets.forEach(target => {
       if (this.config.onAppear) {
         this.config.onAppear.call(target);
@@ -74,12 +74,12 @@ class LazyLoad {
       if (this._isImageElement(target)) {
         this._processImageElement(target);
       }
-    })
+    });
   };
 
-  protected _preProcessImage = () => {
+  protected _preProcessImage: () => void = () => {
     const { placeholder } = this.config;
-  
+
     this.targets.forEach((target) => {
       if (!this._isImageElement(target)) {
         return;
@@ -96,9 +96,9 @@ class LazyLoad {
    */
   createObserver (): IntersectionObserver {
     const { root = null, rootMargin = '0', threshold = 0, onAppear } = this.config;
-    return new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
+    return new IntersectionObserver((entries: IntersectionObserverEntry[]): void => {
       entries.forEach(entry => {
-        if(!entry.isIntersecting) {
+        if (!entry.isIntersecting) {
           return;
         }
 
@@ -110,11 +110,11 @@ class LazyLoad {
     }, {
       root,
       rootMargin,
-      threshold
+      threshold,
     });
   }
 
-  protected _isImageElement = (target: Element) => {
+  protected _isImageElement = (target: Element): boolean => {
     return target.tagName.toLowerCase() === 'img';
   }
 
@@ -124,7 +124,7 @@ class LazyLoad {
    * @protected
    * @memberof LazyLoad
    */
-  protected _processImageElement = (target: Element) => {
+  protected _processImageElement = (target: Element): void => {
     const { attr, srcsetAttr, removeAttr, onLoad, onError } = this.config;
     const src = target.getAttribute(attr);
     const srcset = target.getAttribute(srcsetAttr);
@@ -134,7 +134,7 @@ class LazyLoad {
     }
 
     let img = document.createElement('img');
-    img.onload = () => {
+    img.onload = (): void => {
       target.setAttribute('src', src);
       if (srcset) {
         target.setAttribute('srcset', srcset);
@@ -148,12 +148,12 @@ class LazyLoad {
       img = null;
 
       onLoad && onLoad.call(target);
-    }
-    img.onerror = function () {
+    };
+    img.onerror = function (): void {
       onError && onError.call(target);
-    }
+    };
     img.setAttribute('src', src);
-    img.setAttribute('srcset', srcset ? srcset: '');
+    img.setAttribute('srcset', srcset || '');
   }
 }
 

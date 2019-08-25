@@ -3,7 +3,13 @@ module.exports = {
     "browser": true,
     "es6": true
   },
-  "extends": "standard",
+  "extends": [
+    "standard",
+    "plugin:@typescript-eslint/recommended",
+  ],
+  "plugins": [
+    "@typescript-eslint",
+  ],
   "globals": {
     "Atomics": "readonly",
     "SharedArrayBuffer": "readonly"
