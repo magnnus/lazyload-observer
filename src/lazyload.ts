@@ -72,7 +72,7 @@ class LazyLoad {
         this.config.onAppear.call(target);
       }
       if (this._isImageElement(target)) {
-        this._processImageElement(target);
+        this._processImageElement(target as HTMLImageElement);
       }
     });
   };
@@ -104,7 +104,7 @@ class LazyLoad {
 
         onAppear && onAppear.call(entry.target);
         if (this._isImageElement(entry.target)) {
-          this._processImageElement(entry.target);
+          this._processImageElement(entry.target as HTMLImageElement);
         }
       });
     }, {
@@ -124,7 +124,7 @@ class LazyLoad {
    * @protected
    * @memberof LazyLoad
    */
-  protected _processImageElement = (target: Element): void => {
+  protected _processImageElement = (target: HTMLImageElement): void => {
     const { attr, srcsetAttr, removeAttr, onLoad, onError } = this.config;
     const src = target.getAttribute(attr);
     const srcset = target.getAttribute(srcsetAttr);

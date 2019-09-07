@@ -37,6 +37,6 @@ declare class LazyLoad {
      * @protected
      * @memberof LazyLoad
      */
-    protected _processImageElement: (target: Element) => void;
+    protected _processImageElement: (target: HTMLImageElement) => void;
 }
 export default LazyLoad;
