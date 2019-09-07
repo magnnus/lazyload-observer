@@ -27,6 +27,8 @@ $ yarn add @autots/lazyload
 
 ## Example
 
+### 1. Used in modular manner
+
 ```
 import LazyLoad from '@autots/lazyload';
 
@@ -52,6 +54,18 @@ new LazyLoad('img[data-lazyload]',  {
 })
 ```
 
+### Used in browser plugin
+
+```
+<script src="dist/lazyload.min.js"></script>
+
+<script>
+  new AutoTs.LazyLoad(el, config);
+</script>
+```
+
+> There is a global variable `AutoTs`, and `LazyLoad` property is the constructor.
+
 ## API
 
 ```
@@ -63,11 +77,15 @@ new LazyLoad(el, config);
 | config.root        | Element \| null               | null        | YES | same to IntersectionObserver.root |
 | config.rootMargin  | string \| undefined           | '0px'       | YES | same to IntersectionObserver.rootMargin |
 | config.threshold   | number \| number[]            | 0           | YES | same to IntersectionObserver.threshold |
-| config.attr        | string                        | data-src    | YES | the attr which saves el src value |
-| config.srcset      | string                        | data-srcset | YES | the attr which saves el srcset value |
-| config.delay       | number                        | -1          | YES | use etTimeout to load all el |
+| config.attr        | string                        | data-src    | YES | the attr which saves img el src value |
+| config.srcset      | string                        | data-srcset | YES | the attr which saves img el srcset value |
+| config.delay       | number                        | -1          | YES | use setTimeout(fn, delay) to load all el |
 | config.removeAttr  | boolean                       | true | YES | remove attribute (config with attr & srcsetAttr) |
 | config.placeholder | String \| null                | data:image | YES | the default value of img `src` attribute |
 | config.onLoad      | Function                      | --   | YES | callback when el loaded |
 | config.onError     | Function                      | --   | YES | callback when loaded error |
 | config.onAppear    | Function                      | --   | YES | callback when el trigger in appearance |
+
+# Todo
+
+- could config `placeholder` in non-image cases
