@@ -1,6 +1,6 @@
 /*!
- * @autots/lazyload v1.0.0
- * Last Modified @ 2019-9-7 15:38:10
+ * @autots/lazyload v1.0.1
+ * Last Modified @ 2019-9-7 17:16:00
  * Released under the MIT License.
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -199,7 +199,7 @@ var LazyLoad = /** @class */ (function () {
     LazyLoad.prototype.init = function () {
         var _this = this;
         var delay = this.config.delay;
-        if (delay >= 0) {
+        if (delay && delay >= 0) {
             setTimeout(function () {
                 _this._loadDirectly();
             }, delay);
@@ -224,6 +224,9 @@ var LazyLoad = /** @class */ (function () {
                 onAppear && onAppear.call(entry.target);
                 if (_this._isImageElement(entry.target)) {
                     _this._processImageElement(entry.target);
+                }
+                else {
+                    _this.observer && _this.observer.unobserve(entry.target);
                 }
             });
         }, {

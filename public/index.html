@@ -120,6 +120,19 @@
       <li class="athm-slide__item">
         <a href="####">
           <img
+            class="fn9"
+            width="640"
+            height="320"
+            data-lazyload
+            data-src2="./pics/9@1x.jpg"
+            alt=""
+            style=""
+          >
+        </a>
+      </li>
+      <li class="athm-slide__item">
+        <a href="####">
+          <img
             class="fn8"
             width="640"
             height="320"
@@ -134,26 +147,60 @@
     </ul>
   </div>
 
+  <div class="lazymodule">lazy mdule demo 1!!</div>
+  <div class="lazymodule">lazy mdule demo 2!!</div>
+  <div class="lazymodule">lazy mdule demo 3!!</div>
+  <div class="lazymodule">lazy mdule demo 4!!</div>
+  <div class="lazymodule" style="visibility: hidden">lazy mdule demo 5!!</div>
+  <div class="lazymodule" style="display: none">lazy mdule demo 6!!</div>
+
+  <section class="lazydirectly">lazy directly 1!</section>
+  <section class="lazydirectly">lazy directly 2!</section>
+  <section class="lazydirectly">lazy directly 3!</section>
+  <section class="lazydirectly">lazy directly 4!</section>
+
   <script src="<%= htmlWebpackPlugin.files.chunks.LazyLoad.entry %>"></script>
   <script>
   window.onload = function () {
 
-    var a = new AutoTs.LazyLoad('img', {
+    var imgDemo = new AutoTs.LazyLoad('img', {
       attr: 'data-src2',
       srcsetAttr: 'data-srcset2',
       root: null,
       rootMargin: '0px',
       threshold: 0,
       onLoad: function() {
-        // console.log(this, 'ooooh');
+        var temp = this.src.split('/');
+        console.log(temp[temp.length - 1], 'img loaded successly');
       },
       onError: function() {
-        // console.log(this, 'errrr');
+        var temp = this.getAttribute('data-src2').split('/');
+        console.log(temp[temp.length - 1], 'img loaded error');
       },
       onAppear: function() {
-        // console.log(this, 'appearrrrr');
+        var temp = this.getAttribute('data-src2').split('/');
+        console.log(temp[temp.length - 1], 'img appeared');
       }
-    })
+    });
+    console.log('imgDemo', imgDemo);
+
+    var moduleDemo = new AutoTs.LazyLoad('.lazymodule', {
+      onAppear: function () {
+        this.innerHTML += ('appeared!!!')
+        console.log(this.innerHTML);
+      }
+    });
+    console.log('moduleDemo',  moduleDemo);
+
+
+    var lazyDirectlyDemo = new AutoTs.LazyLoad('.lazydirectly', {
+      onAppear: function () {
+        this.innerHTML += (new Date().toLocaleString());
+        console.log(this.innerHTML);
+      },
+      delay: 2000
+    });
+    console.log('lazyDirectlyDemo',  lazyDirectlyDemo);
   }
   </script>
 </body>

@@ -51,7 +51,7 @@ class LazyLoad {
 
   init (): void {
     const { delay } = this.config;
-    if (delay >= 0) {
+    if (delay && delay >= 0) {
       setTimeout(() => {
         this._loadDirectly();
       }, delay);
@@ -105,6 +105,8 @@ class LazyLoad {
         onAppear && onAppear.call(entry.target);
         if (this._isImageElement(entry.target)) {
           this._processImageElement(entry.target as HTMLImageElement);
+        } else {
+          this.observer && this.observer.unobserve(entry.target);
         }
       });
     }, {
