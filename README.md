@@ -81,11 +81,14 @@ new LazyLoad(el, config);
 | config.srcset      | string                        | data-srcset | YES | the attr which saves img el srcset value |
 | config.delay       | number                        | -1          | YES | use setTimeout(fn, delay) to load all el |
 | config.removeAttr  | boolean                       | true | YES | remove attribute (config with attr & srcsetAttr) |
-| config.placeholder | String \| null                | data:image | YES | the default value of img `src` attribute |
+| config.defaultSrcVal | String \| null                | [base64][base64] | YES | the default value of img `src` attribute |
+| config.placeholder | String                | '' | YES | the text/html content of placeholder for non-image el |
+| config.placeWidth  | String                | '100%' | YES | the width of placeholder |
+| config.placeHeight | string                | '100%' | YES | the height content of placeholder |
 | config.onLoad      | Function                      | --   | YES | callback when el loaded |
 | config.onError     | Function                      | --   | YES | callback when loaded error |
 | config.onAppear    | Function                      | --   | YES | callback when el trigger in appearance |
+| config.maxFailureNumber    | number                      | 2   | YES | after trigger onError `maxFailureNumber` times, will exec unobserve func |
 
-# Todo
 
-- could config `placeholder` in non-image cases
+[base64]: data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEHAAIALAAAAAABAAEAAAICVAEAOw== 

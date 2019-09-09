@@ -153,6 +153,8 @@
   <div class="lazymodule">lazy mdule demo 4!!</div>
   <div class="lazymodule" style="visibility: hidden">lazy mdule demo 5!!</div>
   <div class="lazymodule" style="display: none">lazy mdule demo 6!!</div>
+  <div class="lazymodule"></div>
+
 
   <section class="lazydirectly">lazy directly 1!</section>
   <section class="lazydirectly">lazy directly 2!</section>
@@ -176,6 +178,8 @@
       onError: function() {
         var temp = this.getAttribute('data-src2').split('/');
         console.log(temp[temp.length - 1], 'img loaded error');
+        console.log(typeof this)
+        // imgDemo.unbind(this)
       },
       onAppear: function() {
         var temp = this.getAttribute('data-src2').split('/');

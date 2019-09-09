@@ -1,6 +1,6 @@
 /*!
- * @autots/lazyload v1.0.1
- * Last Modified @ 2019-9-7 17:16:00
+ * @autots/lazyload v1.0.2
+ * Last Modified @ 2019-9-9 22:10:19
  * Released under the MIT License.
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -123,11 +123,39 @@ var LazyLoad = /** @class */ (function () {
         var _this = this;
         this.el = el;
         this.config = config;
-        /**
-         * 直接加载
-         */
+        this.identifier = '__autots-lazyload-placeholder__';
+        this._processPlaceholder = function () {
+            var _a = _this.config, placeholder = _a.placeholder, placeHeight = _a.placeHeight, placeWidth = _a.placeWidth, defaultSrcVal = _a.defaultSrcVal;
+            _this.targets.forEach(function (target) {
+                if (_this._isImageElement(target)) {
+                    if (target.getAttribute('src') === undefined || !target.getAttribute('src')) {
+                        target.setAttribute('src', defaultSrcVal || placeholder);
+                    }
+                }
+                else {
+                    var cont = target.innerHTML.trim();
+                    if (!cont) {
+                        var el = document.createElement('div');
+                        el.style.width = placeWidth;
+                        el.style.height = placeHeight;
+                        el.innerHTML = placeholder;
+                        el.className = _this.identifier;
+                        target.appendChild(el);
+                    }
+                }
+            });
+        };
+        this._removePlaceholder = function (target) {
+            if (!_this._isImageElement(target)) {
+                var p = target.querySelector('.' + _this.identifier);
+                if (p) {
+                    target.removeChild(p);
+                }
+            }
+        };
         this._loadDirectly = function () {
             _this.targets.forEach(function (target) {
+                _this._removePlaceholder(target);
                 if (_this.config.onAppear) {
                     _this.config.onAppear.call(target);
                 }
@@ -136,28 +164,11 @@ var LazyLoad = /** @class */ (function () {
                 }
             });
         };
-        this._preProcessImage = function () {
-            var placeholder = _this.config.placeholder;
-            _this.targets.forEach(function (target) {
-                if (!_this._isImageElement(target)) {
-                    return;
-                }
-                if (target.getAttribute('src') === undefined || !target.getAttribute('src')) {
-                    target.setAttribute('src', placeholder);
-                }
-            });
-        };
         this._isImageElement = function (target) {
             return target.tagName.toLowerCase() === 'img';
         };
-        /**
-         * 处理 img 元素
-         *
-         * @protected
-         * @memberof LazyLoad
-         */
         this._processImageElement = function (target) {
-            var _a = _this.config, attr = _a.attr, srcsetAttr = _a.srcsetAttr, removeAttr = _a.removeAttr, onLoad = _a.onLoad, onError = _a.onError;
+            var _a = _this.config, attr = _a.attr, srcsetAttr = _a.srcsetAttr, removeAttr = _a.removeAttr, onLoad = _a.onLoad, onError = _a.onError, maxFailureNumber = _a.maxFailureNumber;
             var src = target.getAttribute(attr);
             var srcset = target.getAttribute(srcsetAttr);
             if (!src && !srcset) {
@@ -178,6 +189,14 @@ var LazyLoad = /** @class */ (function () {
                 onLoad && onLoad.call(target);
             };
             img.onerror = function () {
+                if (maxFailureNumber > 0) {
+                    var hasFailedNum = +target.getAttribute('lazyload-failed-number') || 0;
+                    var currentFailedNum = hasFailedNum + 1;
+                    target.setAttribute('lazyload-failed-number', "" + currentFailedNum);
+                    if (currentFailedNum >= maxFailureNumber) {
+                        _this.observer && _this.observer.unobserve(target);
+                    }
+                }
                 onError && onError.call(target);
             };
             img.setAttribute('src', src);
@@ -192,12 +211,11 @@ var LazyLoad = /** @class */ (function () {
         else {
             this.targets = Array.prototype.slice.apply(el);
         }
-        // 预处理图片类型
-        this._preProcessImage();
         this.init();
     }
     LazyLoad.prototype.init = function () {
         var _this = this;
+        this._processPlaceholder();
         var delay = this.config.delay;
         if (delay && delay >= 0) {
             setTimeout(function () {
@@ -210,9 +228,6 @@ var LazyLoad = /** @class */ (function () {
             _this.observer.observe(target);
         });
     };
-    /**
-     * 创建 IntersectionObserver 实例
-     */
     LazyLoad.prototype.createObserver = function () {
         var _this = this;
         var _a = this.config, _b = _a.root, root = _b === void 0 ? null : _b, _c = _a.rootMargin, rootMargin = _c === void 0 ? '0px' : _c, _d = _a.threshold, threshold = _d === void 0 ? 0 : _d, onAppear = _a.onAppear;
@@ -221,6 +236,7 @@ var LazyLoad = /** @class */ (function () {
                 if (!entry.isIntersecting) {
                     return;
                 }
+                _this._removePlaceholder(entry.target);
                 onAppear && onAppear.call(entry.target);
                 if (_this._isImageElement(entry.target)) {
                     _this._processImageElement(entry.target);
@@ -235,12 +251,19 @@ var LazyLoad = /** @class */ (function () {
             threshold: threshold,
         });
     };
+    LazyLoad.prototype.unbind = function (target) {
+        this.observer && this.observer.unobserve(target);
+    };
     LazyLoad.defaultConfig = {
         delay: -1,
         attr: 'data-src',
         srcsetAttr: 'data-srcset',
         removeAttr: true,
-        placeholder: 'data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEHAAIALAAAAAABAAEAAAICVAEAOw==',
+        defaultSrcVal: 'data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEHAAIALAAAAAABAAEAAAICVAEAOw==',
+        placeholder: '',
+        placeWidth: '100%',
+        placeHeight: '100%',
+        maxFailureNumber: 2,
     };
     return LazyLoad;
 }());

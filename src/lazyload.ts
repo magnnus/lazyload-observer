@@ -5,10 +5,14 @@ interface Iconfig {
   rootMargin: string | undefined;
   threshold: number | number[];
   delay: number;
+  maxFailureNumber: number;
   attr: string;
   srcsetAttr: string;
   removeAttr: boolean;
+  defaultSrcVal: string;
   placeholder: string;
+  placeWidth: string;
+  placeHeight: string;
   onLoad: () => void;
   onError: () => void;
   onAppear: () => void;
@@ -17,7 +21,7 @@ interface Iconfig {
 type TElements = string | NodeListOf<Element>;
 
 class LazyLoad {
-  constructor (public el: TElements, public config: Partial<Iconfig>) {
+  constructor (public el: TElements, public config?: Partial<Iconfig>) {
     // 生成最终配置
     this.config = {
       ...LazyLoad.defaultConfig,
@@ -31,9 +35,6 @@ class LazyLoad {
       this.targets = Array.prototype.slice.apply(el);
     }
 
-    // 预处理图片类型
-    this._preProcessImage();
-
     this.init();
   }
 
@@ -42,14 +43,21 @@ class LazyLoad {
     attr: 'data-src',
     srcsetAttr: 'data-srcset',
     removeAttr: true,
-    placeholder: 'data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEHAAIALAAAAAABAAEAAAICVAEAOw==',
+    defaultSrcVal: 'data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEHAAIALAAAAAABAAEAAAICVAEAOw==',
+    placeholder: '',
+    placeWidth: '100%',
+    placeHeight: '100%',
+    maxFailureNumber: 2,
   }
 
-  public targets: Element[]
+  public targets: Element[];
 
-  public observer: IntersectionObserver
+  public observer: IntersectionObserver;
+
+  public identifier = '__autots-lazyload-placeholder__';
 
   init (): void {
+    this._processPlaceholder();
     const { delay } = this.config;
     if (delay && delay >= 0) {
       setTimeout(() => {
@@ -63,37 +71,6 @@ class LazyLoad {
     });
   }
 
-  /**
-   * 直接加载
-   */
-  protected _loadDirectly: () => void = () => {
-    this.targets.forEach(target => {
-      if (this.config.onAppear) {
-        this.config.onAppear.call(target);
-      }
-      if (this._isImageElement(target)) {
-        this._processImageElement(target as HTMLImageElement);
-      }
-    });
-  };
-
-  protected _preProcessImage: () => void = () => {
-    const { placeholder } = this.config;
-
-    this.targets.forEach((target) => {
-      if (!this._isImageElement(target)) {
-        return;
-      }
-
-      if (target.getAttribute('src') === undefined || !target.getAttribute('src')) {
-        target.setAttribute('src', placeholder);
-      }
-    });
-  };
-
-  /**
-   * 创建 IntersectionObserver 实例
-   */
   createObserver (): IntersectionObserver {
     const { root = null, rootMargin = '0px', threshold = 0, onAppear } = this.config;
     return new IntersectionObserver((entries: IntersectionObserverEntry[]): void => {
@@ -101,7 +78,7 @@ class LazyLoad {
         if (!entry.isIntersecting) {
           return;
         }
-
+        this._removePlaceholder(entry.target);
         onAppear && onAppear.call(entry.target);
         if (this._isImageElement(entry.target)) {
           this._processImageElement(entry.target as HTMLImageElement);
@@ -116,18 +93,59 @@ class LazyLoad {
     });
   }
 
+  public unbind (target: Element): void {
+    this.observer && this.observer.unobserve(target);
+  }
+
+  protected _processPlaceholder: () => void = () => {
+    const { placeholder, placeHeight, placeWidth, defaultSrcVal } = this.config;
+
+    this.targets.forEach((target) => {
+      if (this._isImageElement(target)) {
+        if (target.getAttribute('src') === undefined || !target.getAttribute('src')) {
+          target.setAttribute('src', defaultSrcVal || placeholder);
+        }
+      } else {
+        const cont = target.innerHTML.trim();
+        if (!cont) {
+          const el = document.createElement('div');
+          el.style.width = placeWidth;
+          el.style.height = placeHeight;
+          el.innerHTML = placeholder;
+          el.className = this.identifier;
+          target.appendChild(el);
+        }
+      }
+    });
+  };
+
+  protected _removePlaceholder = (target: Element): void => {
+    if (!this._isImageElement(target)) {
+      const p = target.querySelector('.' + this.identifier);
+      if (p) {
+        target.removeChild(p);
+      }
+    }
+  }
+
+  protected _loadDirectly: () => void = () => {
+    this.targets.forEach(target => {
+      this._removePlaceholder(target);
+      if (this.config.onAppear) {
+        this.config.onAppear.call(target);
+      }
+      if (this._isImageElement(target)) {
+        this._processImageElement(target as HTMLImageElement);
+      }
+    });
+  };
+
   protected _isImageElement = (target: Element): boolean => {
     return target.tagName.toLowerCase() === 'img';
   }
 
-  /**
-   * 处理 img 元素
-   *
-   * @protected
-   * @memberof LazyLoad
-   */
   protected _processImageElement = (target: HTMLImageElement): void => {
-    const { attr, srcsetAttr, removeAttr, onLoad, onError } = this.config;
+    const { attr, srcsetAttr, removeAttr, onLoad, onError, maxFailureNumber } = this.config;
     const src = target.getAttribute(attr);
     const srcset = target.getAttribute(srcsetAttr);
 
@@ -151,7 +169,15 @@ class LazyLoad {
 
       onLoad && onLoad.call(target);
     };
-    img.onerror = function (): void {
+    img.onerror = (): void => {
+      if (maxFailureNumber > 0) {
+        const hasFailedNum = +target.getAttribute('lazyload-failed-number') || 0;
+        const currentFailedNum = hasFailedNum + 1;
+        target.setAttribute('lazyload-failed-number', `${currentFailedNum}`);
+        if (currentFailedNum >= maxFailureNumber) {
+          this.observer && this.observer.unobserve(target);
+        }
+      }
       onError && onError.call(target);
     };
     img.setAttribute('src', src);
