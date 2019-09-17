@@ -88,7 +88,7 @@ new LazyLoad(el, config);
 | config.onLoad      | Function                      | --   | YES | callback when el loaded |
 | config.onError     | Function                      | --   | YES | callback when loaded error |
 | config.onAppear    | Function                      | --   | YES | callback when el trigger in appearance |
-| config.maxFailureNumber    | number                      | 2   | YES | after trigger onError `maxFailureNumber` times, will exec unobserve func |
+| config.maxFailureNumber    | number                      |  1  | YES | after trigger onError `maxFailureNumber` times, will exec unobserve func |
 
 
 [base64]: data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEHAAIALAAAAAABAAEAAAICVAEAOw== 
