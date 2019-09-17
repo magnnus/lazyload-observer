@@ -47,7 +47,7 @@ class LazyLoad {
     placeholder: '',
     placeWidth: '100%',
     placeHeight: '100%',
-    maxFailureNumber: 2,
+    maxFailureNumber: 1,
   }
 
   public targets: Element[];
