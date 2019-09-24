@@ -1,6 +1,6 @@
 {
   "name": "@autots/lazyload",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "A LazyLoad lib implemented through IntersectionObserver API",
   "main": "dist/lazyload.umd.js",
   "module": "lib/lazyload.js",
