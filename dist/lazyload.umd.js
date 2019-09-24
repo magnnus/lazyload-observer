@@ -1,6 +1,6 @@
 /*!
- * @autots/lazyload v1.1.0
- * Last Modified @ 2019-9-17 10:24:35 AM
+ * @autots/lazyload v1.1.1
+ * Last Modified @ 2019-9-24 10:41:27 AM
  * Released under the MIT License.
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -124,12 +124,12 @@ var LazyLoad = /** @class */ (function () {
         this.el = el;
         this.config = config;
         this.identifier = '__autots-lazyload-placeholder__';
-        this._processPlaceholder = function () {
+        this._addPlaceholder = function () {
             var _a = _this.config, placeholder = _a.placeholder, placeHeight = _a.placeHeight, placeWidth = _a.placeWidth, defaultSrcVal = _a.defaultSrcVal;
             _this.targets.forEach(function (target) {
                 if (_this._isImageElement(target)) {
-                    if (target.getAttribute('src') === undefined || !target.getAttribute('src')) {
-                        target.setAttribute('src', defaultSrcVal || placeholder);
+                    if (!target.getAttribute('src')) {
+                        target.setAttribute('src', defaultSrcVal);
                     }
                 }
                 else {
@@ -145,6 +145,7 @@ var LazyLoad = /** @class */ (function () {
                 }
             });
         };
+        // only for non-image element
         this._removePlaceholder = function (target) {
             if (!_this._isImageElement(target)) {
                 var p = target.querySelector('.' + _this.identifier);
@@ -165,7 +166,8 @@ var LazyLoad = /** @class */ (function () {
             });
         };
         this._isImageElement = function (target) {
-            return target.tagName.toLowerCase() === 'img';
+            return target instanceof HTMLImageElement;
+            // return target.tagName.toLowerCase() === 'img';
         };
         this._processImageElement = function (target) {
             var _a = _this.config, attr = _a.attr, srcsetAttr = _a.srcsetAttr, removeAttr = _a.removeAttr, onLoad = _a.onLoad, onError = _a.onError, maxFailureNumber = _a.maxFailureNumber;
@@ -215,7 +217,7 @@ var LazyLoad = /** @class */ (function () {
     }
     LazyLoad.prototype.init = function () {
         var _this = this;
-        this._processPlaceholder();
+        this._addPlaceholder();
         var delay = this.config.delay;
         if (delay && delay >= 0) {
             setTimeout(function () {
@@ -223,26 +225,35 @@ var LazyLoad = /** @class */ (function () {
             }, delay);
             return;
         }
-        this.observer = this.createObserver();
+        this.observer = this._createObserver();
         this.targets.forEach(function (target) {
             _this.observer.observe(target);
         });
     };
-    LazyLoad.prototype.createObserver = function () {
+    LazyLoad.prototype._createObserver = function () {
         var _this = this;
-        var _a = this.config, _b = _a.root, root = _b === void 0 ? null : _b, _c = _a.rootMargin, rootMargin = _c === void 0 ? '0px' : _c, _d = _a.threshold, threshold = _d === void 0 ? 0 : _d, onAppear = _a.onAppear;
-        return new IntersectionObserver(function (entries) {
+        var _a = this.config, _b = _a.wait, wait = _b === void 0 ? 100 : _b, _c = _a.root, root = _c === void 0 ? null : _c, _d = _a.rootMargin, rootMargin = _d === void 0 ? '0px' : _d, _e = _a.threshold, threshold = _e === void 0 ? 0 : _e, onAppear = _a.onAppear;
+        return new IntersectionObserver(function (entries, observer) {
             entries.forEach(function (entry) {
+                var target = entry.target;
                 if (!entry.isIntersecting) {
-                    return;
-                }
-                _this._removePlaceholder(entry.target);
-                onAppear && onAppear.call(entry.target);
-                if (_this._isImageElement(entry.target)) {
-                    _this._processImageElement(entry.target);
+                    var timer = target.getAttribute('lazyload-timer');
+                    timer && window.clearTimeout(+timer);
                 }
                 else {
-                    _this.observer && _this.observer.unobserve(entry.target);
+                    var timer_1 = window.setTimeout(function () {
+                        _this._removePlaceholder(target);
+                        onAppear && onAppear.call(target);
+                        if (_this._isImageElement(target)) {
+                            _this._processImageElement(target);
+                        }
+                        else {
+                            observer.unobserve(target);
+                        }
+                        window.clearTimeout(timer_1);
+                        target.removeAttribute('lazyload-timer');
+                    }, wait);
+                    target.setAttribute('lazyload-timer', timer_1.toString());
                 }
             });
         }, {
@@ -254,8 +265,12 @@ var LazyLoad = /** @class */ (function () {
     LazyLoad.prototype.unbind = function (target) {
         this.observer && this.observer.unobserve(target);
     };
+    LazyLoad.prototype.destory = function () {
+        this.observer && this.observer.disconnect();
+    };
     LazyLoad.defaultConfig = {
         delay: -1,
+        wait: 100,
         attr: 'data-src',
         srcsetAttr: 'data-srcset',
         removeAttr: true,

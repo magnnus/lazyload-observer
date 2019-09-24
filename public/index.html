@@ -165,11 +165,12 @@
   <script>
   window.onload = function () {
 
-    var imgDemo = new AutoTs.LazyLoad('img', {
+    window.imgDemo = new AutoTs.LazyLoad('img', {
       attr: 'data-src2',
       srcsetAttr: 'data-srcset2',
       root: null,
       rootMargin: '0px',
+      wait: 300,
       threshold: 0,
       onLoad: function() {
         var temp = this.src.split('/');

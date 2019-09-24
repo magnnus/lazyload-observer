@@ -1,8 +1,9 @@
 import 'intersection-observer';
 interface Iconfig {
     root: Element | null;
-    rootMargin: string | undefined;
+    rootMargin: string;
     threshold: number | number[];
+    wait: number;
     delay: number;
     maxFailureNumber: number;
     attr: string;
@@ -26,9 +27,10 @@ declare class LazyLoad {
     observer: IntersectionObserver;
     identifier: string;
     init(): void;
-    createObserver(): IntersectionObserver;
+    protected _createObserver(): IntersectionObserver;
     unbind(target: Element): void;
-    protected _processPlaceholder: () => void;
+    destory(): void;
+    protected _addPlaceholder: () => void;
     protected _removePlaceholder: (target: Element) => void;
     protected _loadDirectly: () => void;
     protected _isImageElement: (target: Element) => boolean;

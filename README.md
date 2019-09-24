@@ -71,24 +71,25 @@ new LazyLoad('img[data-lazyload]',  {
 ```
 new LazyLoad(el, config);
 ```
-| Name | Type | Default | Optional | Description
-|:-------------:|:-------------------:|:-------------:|:-------:|:-----------------------|
-| el                 | string \| NodeListOf\<Element\> | --          | NO  | the element(s) need lazy |
-| config.root        | Element \| null               | null        | YES | same to IntersectionObserver.root |
-| config.rootMargin  | string \| undefined           | '0px'       | YES | same to IntersectionObserver.rootMargin |
-| config.threshold   | number \| number[]            | 0           | YES | same to IntersectionObserver.threshold |
-| config.attr        | string                        | data-src    | YES | the attr which saves img el src value |
-| config.srcset      | string                        | data-srcset | YES | the attr which saves img el srcset value |
-| config.delay       | number                        | -1          | YES | use setTimeout(fn, delay) to load all el |
-| config.removeAttr  | boolean                       | true | YES | remove attribute (config with attr & srcsetAttr) |
-| config.defaultSrcVal | String \| null                | [base64][base64] | YES | the default value of img `src` attribute |
-| config.placeholder | String                | '' | YES | the text/html content of placeholder for non-image el |
-| config.placeWidth  | String                | '100%' | YES | the width of placeholder |
-| config.placeHeight | string                | '100%' | YES | the height content of placeholder |
-| config.onLoad      | Function                      | --   | YES | callback when el loaded |
-| config.onError     | Function                      | --   | YES | callback when loaded error |
-| config.onAppear    | Function                      | --   | YES | callback when el trigger in appearance |
-| config.maxFailureNumber    | number                      |  1  | YES | after trigger onError `maxFailureNumber` times, will exec unobserve func |
+| Name | Type | Default | Optional | Description |
+|:------------------:|:------------------------------:|:----------------:|:----:|:-----------------------|
+| el                 | string \| NodeListOf\<Element\>| --               | NO  | the element(s) need lazy |
+| config.root        | Element \| null                | null             | YES | same to IntersectionObserver.root |
+| config.rootMargin  | string                         | '0px'            | YES | same to IntersectionObserver.rootMargin |
+| config.threshold   | number \| number[]             | 0                | YES | same to IntersectionObserver.threshold |
+| config.attr        | string                         | data-src         | YES | the attr which saves img-el src value |
+| config.srcset      | string                         | data-srcset      | YES | the attr which saves img-el srcset value |
+| config.delay       | number                         | -1               | YES | use setTimeout(fn, delay) to load all el |
+| config.wait        | number                         | 100              | YES | use setTimeout(fn, wait) to decide if the el is visible |
+| config.removeAttr  | boolean                        | true             | YES | remove attribute (config with attr & srcsetAttr) |
+| config.defaultSrcVal | String \| null               | [base64][base64] | YES | the default value of img `src` attribute |
+| config.placeholder | String                         | ''               | YES | the text/html content of placeholder for non-image el |
+| config.placeWidth  | String                         | '100%'           | YES | the width of placeholder |
+| config.placeHeight | string                         | '100%'           | YES | the height content of placeholder |
+| config.onLoad      | Function                       | --               | YES | callback when el loaded |
+| config.onError     | Function                       | --               | YES | callback when loaded error |
+| config.onAppear    | Function                       | --               | YES | callback when el trigger in appearance |
+| config.maxFailureNumbe | number                     | 1                | YES | after trigger onError `maxFailureNumber` times, will exec unobserve func |
 
 
 [base64]: data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEHAAIALAAAAAABAAEAAAICVAEAOw== 

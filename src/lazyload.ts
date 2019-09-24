@@ -2,8 +2,9 @@ import 'intersection-observer';
 
 interface Iconfig {
   root: Element | null;
-  rootMargin: string | undefined;
+  rootMargin: string;
   threshold: number | number[];
+  wait: number;
   delay: number;
   maxFailureNumber: number;
   attr: string;
@@ -40,6 +41,7 @@ class LazyLoad {
 
   static readonly defaultConfig: Partial<Iconfig> = {
     delay: -1,
+    wait: 100,
     attr: 'data-src',
     srcsetAttr: 'data-srcset',
     removeAttr: true,
@@ -57,33 +59,52 @@ class LazyLoad {
   public identifier = '__autots-lazyload-placeholder__';
 
   init (): void {
-    this._processPlaceholder();
+    this._addPlaceholder();
+
     const { delay } = this.config;
+
     if (delay && delay >= 0) {
       setTimeout(() => {
         this._loadDirectly();
       }, delay);
       return;
     }
-    this.observer = this.createObserver();
+
+    this.observer = this._createObserver();
     this.targets.forEach(target => {
       this.observer.observe(target);
     });
   }
 
-  createObserver (): IntersectionObserver {
-    const { root = null, rootMargin = '0px', threshold = 0, onAppear } = this.config;
-    return new IntersectionObserver((entries: IntersectionObserverEntry[]): void => {
+  protected _createObserver (): IntersectionObserver {
+    const {
+      wait = 100,
+      root = null,
+      rootMargin = '0px',
+      threshold = 0,
+      onAppear,
+    } = this.config;
+
+    return new IntersectionObserver((entries: IntersectionObserverEntry[], observer: IntersectionObserver): void => {
       entries.forEach(entry => {
+        const target = entry.target;
+
         if (!entry.isIntersecting) {
-          return;
-        }
-        this._removePlaceholder(entry.target);
-        onAppear && onAppear.call(entry.target);
-        if (this._isImageElement(entry.target)) {
-          this._processImageElement(entry.target as HTMLImageElement);
+          const timer = target.getAttribute('lazyload-timer');
+          timer && window.clearTimeout(+timer);
         } else {
-          this.observer && this.observer.unobserve(entry.target);
+          const timer = window.setTimeout(() => {
+            this._removePlaceholder(target);
+            onAppear && onAppear.call(target);
+            if (this._isImageElement(target)) {
+              this._processImageElement(target as HTMLImageElement);
+            } else {
+              observer.unobserve(target);
+            }
+            window.clearTimeout(timer);
+            target.removeAttribute('lazyload-timer');
+          }, wait);
+          target.setAttribute('lazyload-timer', timer.toString());
         }
       });
     }, {
@@ -97,13 +118,17 @@ class LazyLoad {
     this.observer && this.observer.unobserve(target);
   }
 
-  protected _processPlaceholder: () => void = () => {
+  public destory (): void {
+    this.observer && this.observer.disconnect();
+  }
+
+  protected _addPlaceholder: () => void = () => {
     const { placeholder, placeHeight, placeWidth, defaultSrcVal } = this.config;
 
     this.targets.forEach((target) => {
       if (this._isImageElement(target)) {
-        if (target.getAttribute('src') === undefined || !target.getAttribute('src')) {
-          target.setAttribute('src', defaultSrcVal || placeholder);
+        if (!target.getAttribute('src')) {
+          target.setAttribute('src', defaultSrcVal);
         }
       } else {
         const cont = target.innerHTML.trim();
@@ -119,6 +144,7 @@ class LazyLoad {
     });
   };
 
+  // only for non-image element
   protected _removePlaceholder = (target: Element): void => {
     if (!this._isImageElement(target)) {
       const p = target.querySelector('.' + this.identifier);
@@ -141,7 +167,8 @@ class LazyLoad {
   };
 
   protected _isImageElement = (target: Element): boolean => {
-    return target.tagName.toLowerCase() === 'img';
+    return target instanceof HTMLImageElement;
+    // return target.tagName.toLowerCase() === 'img';
   }
 
   protected _processImageElement = (target: HTMLImageElement): void => {
