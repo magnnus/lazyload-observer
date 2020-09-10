@@ -1,5 +1,5 @@
 import 'intersection-observer';
-interface Iconfig {
+export interface Iconfig {
     root: Element | null;
     rootMargin: string;
     threshold: number | number[];
@@ -17,7 +17,7 @@ interface Iconfig {
     onError: () => void;
     onAppear: () => void;
 }
-declare type TElements = string | NodeListOf<Element>;
+export declare type TElements = string | NodeListOf<Element> | Element[];
 declare class LazyLoad {
     el: TElements;
     config?: Partial<Iconfig>;

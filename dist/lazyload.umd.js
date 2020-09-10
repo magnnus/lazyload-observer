@@ -1,6 +1,6 @@
 /*!
- * @autots/lazyload v1.1.1
- * Last Modified @ 2019-9-24 10:41:27 AM
+ * @autots/lazyload v1.2.0
+ * Last Modified @ 2020-9-10 2:20:53 PM
  * Released under the MIT License.
  */
 (function webpackUniversalModuleDefinition(root, factory) {
