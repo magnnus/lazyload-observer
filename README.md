@@ -99,6 +99,7 @@ defaultConfig = {
 
 ### config
 
+| Name | Type | Default | Optional | Description |
 |:-----------:|:-----------------:|:----------:|:----:|:-----------------------|
 | root        | Element \| null   | null       | YES | same to `IntersectionObserver.root` |
 | rootMargin  | string            | '0px'      | YES | same to `IntersectionObserver.rootMargin` |
