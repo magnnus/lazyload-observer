@@ -1,10 +1,10 @@
-# lazyload-observer
+# lazyload observer
 
-A LazyLoad Lib implemented through IntersectionObserver API
+A LazyLoad Lib implemented through `IntersectionObserver` API
 
 ## Features
 
-- typescript featuires & compiled to vanilla js 
+- typescript features & compiled to vanilla js 
 - original configuration of Intersection API  
 - some custom lifecycle callback  
 - support ie9+
@@ -29,7 +29,7 @@ $ yarn add @autots/lazyload
 
 ### 1. ES Module
 
-```
+```js
 import LazyLoad from '@autots/lazyload';
 
 // 1. The simplest way
@@ -56,7 +56,7 @@ new LazyLoad('img[data-lazyload]',  {
 
 ### Browser Plugin
 
-```
+```html
 <script src="dist/lazyload.min.js"></script>
 
 <script>
@@ -106,9 +106,9 @@ defaultConfig = {
 | threshold   | number \| number[]| 0          | YES | same to `IntersectionObserver.threshold` |
 | attr        | string            | data-src   | YES | the attr name which saves ImageElement `src` value |
 | srcset      | string            | data-srcset| YES | the attr name which saves ImageElement `srcset` value |
-| delay       | number            | -1         | YES | use setTimeout(fn, delay) to load all el |
-| wait        | number            | 100        | YES | use setTimeout(fn, wait) to decide if the el is visible |
-| removeAttr  | boolean           | true       | YES | remove attr name (config with attr & srcsetAttr) |
+| delay       | number            | -1         | YES | use `setTimeout(fn, delay)` to load all el |
+| wait        | number            | 100        | YES | use `setTimeout(fn, wait)` to decide if the el is visible |
+| removeAttr  | boolean           | true       | YES | remove attr name (configed with attr & srcsetAttr) |
 | defaultSrcVal | String \| null  | [base64][base64] | YES | the default value of img `src` attribute |
 | placeholder | String            | ''         | YES | the text/html content of placeholder for non-image el |
 | placeWidth  | String            | '100%'     | YES | the width of placeholder |
@@ -116,7 +116,7 @@ defaultConfig = {
 | onLoad      | Function          | --         | YES | callback when `el` loaded |
 | onError     | Function          | --         | YES | callback when loaded error |
 | onAppear    | Function          | --         | YES | callback when `el` trigger in appearance |
-| maxFailureNumbe | number        | 1          | YES | after trigger onError `maxFailureNumber` times, will exec unobserve func |
+| maxFailureNumbe | number        | 1          | YES | after trigger onError `maxFailureNumber` times, will exec `unobserve` fn |
 
 Note: The `el` type should be `String` or `NodeListOf<Element>`, that is to say we recommend you to use *CSS selector* to set , or use `querySelectorAll`.
 
