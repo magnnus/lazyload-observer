@@ -91,32 +91,31 @@ defaultConfig = {
 
 
 | Name | Type | Default | Optional | Description |
-|:-----------:|:-----------------:|:----------:|:----:|:-----------------------|
-| el          | string \| NodeListOf\<Element\>| --               | NO  | the element(s) need lazy |
-| config      | typeof defaultConfig           | defaultConfig    | Yes | -- |
-
+|:-----------:|:------------------------------:|:-------------:|:---:|:-----------------------|
+| el          | string \| NodeListOf\<Element\>| --            | NO  | the element(s) need lazy |
+| config      | typeof defaultConfig           | defaultConfig | --  |
 
 
 ### config
 
-| Name | Type | Default | Optional | Description |
-|:-----------:|:-----------------:|:----------:|:----:|:-----------------------|
-| root        | Element \| null   | null       | YES | same to `IntersectionObserver.root` |
-| rootMargin  | string            | '0px'      | YES | same to `IntersectionObserver.rootMargin` |
-| threshold   | number \| number[]| 0          | YES | same to `IntersectionObserver.threshold` |
-| attr        | string            | data-src   | YES | the attr name which saves ImageElement `src` value |
-| srcset      | string            | data-srcset| YES | the attr name which saves ImageElement `srcset` value |
-| delay       | number            | -1         | YES | use `setTimeout(fn, delay)` to load all el |
-| wait        | number            | 100        | YES | use `setTimeout(fn, wait)` to decide if the el is visible |
-| removeAttr  | boolean           | true       | YES | remove attr name (configed with attr & srcsetAttr) |
-| defaultSrcVal | String \| null  | [base64][base64] | YES | the default value of img `src` attribute |
-| placeholder | String            | ''         | YES | the text/html content of placeholder for non-image el |
-| placeWidth  | String            | '100%'     | YES | the width of placeholder |
-| placeHeight | string            | '100%'     | YES | the height content of placeholder |
-| onLoad      | Function          | --         | YES | callback when `el` loaded |
-| onError     | Function          | --         | YES | callback when loaded error |
-| onAppear    | Function          | --         | YES | callback when `el` trigger in appearance |
-| maxFailureNumbe | number        | 1          | YES | after trigger onError `maxFailureNumber` times, will exec `unobserve` fn |
+| Name | Type | Default | Description |
+|:-----------:|:-----------------:|:----------------:|:-----------------------|
+| root        | Element \| null   | null             | same to `IntersectionObserver.root` |
+| rootMargin  | string            | '0px'            | same to `IntersectionObserver.rootMargin` |
+| threshold   | number \| number[]| 0                | same to `IntersectionObserver.threshold` |
+| attr        | string            | data-src         | the attr name which saves ImageElement `src` value |
+| srcset      | string            | data-srcset      | the attr name which saves ImageElement `srcset` value |
+| delay       | number            | -1               | use `setTimeout(fn, delay)` to load all el |
+| wait        | number            | 100              | use `setTimeout(fn, wait)` to decide if the el is visible |
+| removeAttr  | boolean           | true             | remove attr name (configed with attr & srcsetAttr) |
+| defaultSrcVal | String \| null  | [base64][base64] | the default value of img `src` attribute |
+| placeholder | String            | ''               | the text/html content of placeholder for non-image el |
+| placeWidth  | String            | '100%'           | the width of placeholder |
+| placeHeight | string            | '100%'           | the height content of placeholder |
+| onLoad      | Function          | --               | callback when `el` loaded |
+| onError     | Function          | --               | callback when loaded error |
+| onAppear    | Function          | --               | callback when `el` trigger in appearance |
+| maxFailureNumbe | number        | 1                | after trigger onError `maxFailureNumber` times, will exec `unobserve` fn |
 
 Note: The `el` type should be `String` or `NodeListOf<Element>`, that is to say we recommend you to use *CSS selector* to set , or use `querySelectorAll`.
 
