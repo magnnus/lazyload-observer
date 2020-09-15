@@ -52,7 +52,7 @@ function loadScript(src, cb) {
   document.body.insertAdjacentElement('beforeend', script);
 }
 
-if (!AutoTs || !AutoTs.LazyLoad) {
+if (!window.AutoTs || !window.AutoTs.LazyLoad) {
   loadScript('https://magnnus.github.io/lazyload-observer/dist/lazyload.min.js', init)
 } else {
   window.onload = init;
