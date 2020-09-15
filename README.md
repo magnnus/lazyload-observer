@@ -64,6 +64,8 @@ new LazyLoad('img[data-lazyload]',  {
 </script>
 ```
 
+[Online Demo](https://magnnus.github.io/lazyload-observer/public/index.html)
+
 > There is a global variable `AutoTs`, and `LazyLoad` property is the constructor.
 
 ## API
@@ -74,26 +76,24 @@ new LazyLoad(el, config);
 
 ```js
 defaultConfig = {
-  {
-    delay: -1,
-    wait: 100,
-    attr: 'data-src',
-    srcsetAttr: 'data-srcset',
-    removeAttr: true,
-    defaultSrcVal: 'data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEHAAIALAAAAAABAAEAAAICVAEAOw==',
-    placeholder: '',
-    placeWidth: '100%',
-    placeHeight: '100%',
-    maxFailureNumber: 1,
-  }
+  delay: -1,
+  wait: 100,
+  attr: 'data-src',
+  srcsetAttr: 'data-srcset',
+  removeAttr: true,
+  defaultSrcVal: 'data:image/gif;base64,R0lGODlhAQABAJEAAAAAAP///////wAAACH5BAEHAAIALAAAAAABAAEAAAICVAEAOw==',
+  placeholder: '',
+  placeWidth: '100%',
+  placeHeight: '100%',
+  maxFailureNumber: 1,
 }
 ```
 
 
 | Name | Type | Default | Optional | Description |
 |:-----------:|:------------------------------:|:-------------:|:---:|:-----------------------|
-| el          | string \| NodeListOf\<Element\>| --            | NO  | the element(s) need lazy |
-| config      | typeof defaultConfig           | defaultConfig | --  |
+| el          | string \| NodeListOf\<Element\>| --            | No  | the element(s) need lazy |
+| config      | typeof defaultConfig           | defaultConfig | Yes | Advanced configuration |
 
 
 ### config
