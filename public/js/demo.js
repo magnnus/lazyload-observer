@@ -53,7 +53,7 @@ function loadScript(src, cb) {
 }
 
 if (!AutoTs || !AutoTs.LazyLoad) {
-  loadScript('https://magnnus.github.io/lazyload-observer/lib/lazyload.js', init)
+  loadScript('https://magnnus.github.io/lazyload-observer/dist/lazyload.min.js', init)
 } else {
   window.onload = init;
 }
