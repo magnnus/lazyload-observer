@@ -10,11 +10,11 @@ module.exports = {
     disableHostCheck: true,
     compress: true,
     port: 9000,
-    contentBase: path.resolve(__dirname, '..', './public'),
+    contentBase: path.resolve(__dirname, '..', 'public'),
   },
   plugins: [
     new HTMLWebpackPlugin({
-      inject: false,
+      inject: 'head',
       template: path.resolve(__dirname, '..', 'public/index.html'),
     }),
   ]

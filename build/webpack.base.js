@@ -13,7 +13,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, '..', 'dist'),
-    filename: 'autots.lazyload.js',
+    filename: 'lazyload.min.js',
     libraryTarget: 'umd',
     library: ['AutoTs', '[name]'],
     globalObject: 'this',

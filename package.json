@@ -1,9 +1,8 @@
 {
   "name": "@autots/lazyload",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A LazyLoad lib implemented through IntersectionObserver API",
   "main": "dist/lazyload.umd.js",
-  "module": "lib/lazyload.js",
   "browser": "dist/lazyload.umd.js",
   "types": "lib/lazyload.d.ts",
   "scripts": {
@@ -20,7 +19,7 @@
     "ts",
     "typescript"
   ],
-  "author": "majiadong <majiadong@autohome.com.cn>",
+  "author": "Magn Mah <magnnus1215@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.0.0",
@@ -55,7 +54,8 @@
     "url": "https://github.com/magnnus/lazyload-observer/issues"
   },
   "files": [
-    "lib",
-    "dist"
+    "lib/*.js",
+    "lib/*.ts",
+    "dist/*.js"
   ]
 }

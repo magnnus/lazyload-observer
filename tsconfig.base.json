@@ -9,7 +9,7 @@
     "public",
   ],
   "compilerOptions": {
-    "incremental": true,
+    // "incremental": true,
     "diagnostics": true,
     // "noEmitOnError": true,
     // "noEmitHelpers": true,  // 不生成 helper 函数，需额外安装 ts-helpers

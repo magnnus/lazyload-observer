@@ -29,7 +29,6 @@
             data-src2="./pics/1@1x.jpg"
             data-srcset2="./pics/1.jpg 2x, ./pics/1@1x.jpg"
             alt=""
-            style=""
           >
         </a>
       </li>
@@ -43,7 +42,6 @@
             data-src2="./pics/2@1x.jpg"
             data-srcset2="./pics/2.jpg 2x, ./pics/2@1x.jpg"
             alt=""
-            style=""
           >
         </a>
       </li>
@@ -57,7 +55,6 @@
             data-src2="./pics/3@1x.jpg"
             data-srcset2="./pics/3.jpg 2x, ./pics/3@1x.jpg"
             alt=""
-            style=""
           >
         </a>
       </li>
@@ -71,7 +68,6 @@
             data-src2="./pics/4@1x.jpg"
             data-srcset2="./pics/4.jpg 2x, ./pics/4@1x.jpg"
             alt=""
-            style=""
           >
         </a>
       </li>
@@ -85,7 +81,6 @@
             data-src2="./pics/5@1x.jpg"
             data-srcset2="./pics/5.jpg 2x, ./pics/5@1x.jpg"
             alt=""
-            style=""
           >
         </a>
       </li>
@@ -99,7 +94,6 @@
             data-src2="./pics/6@1x.jpg"
             data-srcset2="./pics/6.jpg 2x, ./pics/6@1x.jpg"
             alt=""
-            style=""
           >
         </a>
       </li>
@@ -113,7 +107,6 @@
             data-src2="./pics/7@1x.jpg"
             data-srcset2="./pics/7.jpg 2x, ./pics/7@1x.jpg"
             alt=""
-            style=""
           >
         </a>
       </li>
@@ -126,7 +119,6 @@
             data-lazyload
             data-src2="./pics/9@1x.jpg"
             alt=""
-            style=""
           >
         </a>
       </li>
@@ -140,7 +132,6 @@
             data-src2="./pics/8@1x.jpg"
             data-srcset2="./pics/8.jpg 2x, ./pics/8@1x.jpg"
             alt=""
-            style=""
           >
         </a>
       </li>
@@ -161,53 +152,7 @@
   <section class="lazydirectly">lazy directly 3!</section>
   <section class="lazydirectly">lazy directly 4!</section>
 
-  <script src="<%= htmlWebpackPlugin.files.chunks.LazyLoad.entry %>"></script>
-  <script>
-  window.onload = function () {
-
-    window.imgDemo = new AutoTs.LazyLoad('img', {
-      attr: 'data-src2',
-      srcsetAttr: 'data-srcset2',
-      root: null,
-      rootMargin: '0px',
-      wait: 300,
-      threshold: 0,
-      onLoad: function() {
-        var temp = this.src.split('/');
-        console.log(temp[temp.length - 1], 'img loaded successly');
-      },
-      onError: function() {
-        var temp = this.getAttribute('data-src2').split('/');
-        console.log(temp[temp.length - 1], 'img loaded error');
-        console.log(typeof this)
-        // imgDemo.unbind(this)
-      },
-      onAppear: function() {
-        var temp = this.getAttribute('data-src2').split('/');
-        console.log(temp[temp.length - 1], 'img appeared');
-      }
-    });
-    console.log('imgDemo', imgDemo);
-
-    var moduleDemo = new AutoTs.LazyLoad('.lazymodule', {
-      onAppear: function () {
-        this.innerHTML += ('appeared!!!')
-        console.log(this.innerHTML);
-      }
-    });
-    console.log('moduleDemo',  moduleDemo);
-
-
-    var lazyDirectlyDemo = new AutoTs.LazyLoad('.lazydirectly', {
-      onAppear: function () {
-        this.innerHTML += (new Date().toLocaleString());
-        console.log(this.innerHTML);
-      },
-      delay: 2000
-    });
-    console.log('lazyDirectlyDemo',  lazyDirectlyDemo);
-  }
-  </script>
+  <script src="./js/demo.js"></script>
 </body>
 
 </html>
